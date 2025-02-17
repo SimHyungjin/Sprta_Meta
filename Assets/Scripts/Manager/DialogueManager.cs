@@ -48,6 +48,7 @@ public class DialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
         dialogueIndex = 0;
         onDialog = false;
+        GameManager.Instance.ChangeScene("JumpGameScene");
     }
 
 

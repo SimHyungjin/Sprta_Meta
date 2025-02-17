@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class CameraController : MonoBehaviour
@@ -8,10 +9,13 @@ public class CameraController : MonoBehaviour
     [SerializeField] private GameObject target;
     private float lerpSpeed = 1.0f;
     private Camera _camera;
+    private string currentScene;
+    private Vector3 targetPos;
 
     private void Awake()
     {
         _camera = Camera.main;
+        currentScene = SceneManager.GetActiveScene().name;
     }
     void Update()
     {
@@ -26,8 +30,16 @@ public class CameraController : MonoBehaviour
 
         if (target != null)
         {
-            Vector3 targetPos = new Vector3(target.transform.position.x, target.transform.position.y, transform.position.z + SceneScale);
-            transform.position = Vector3.Lerp(transform.position, targetPos, lerpSpeed);
+            if (currentScene == "MainScene")
+            {
+                targetPos = new Vector3(target.transform.position.x, target.transform.position.y, transform.position.z + SceneScale);
+            }
+            else if(currentScene == "JumpGameScene")
+            {
+                targetPos = new Vector3(target.transform.position.x +4.5f , transform.position.y, transform.position.z + SceneScale);
+            }
+                transform.position = Vector3.Lerp(transform.position, targetPos, lerpSpeed);
+            
         }
     }
 
