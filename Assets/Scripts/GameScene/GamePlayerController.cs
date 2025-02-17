@@ -31,10 +31,6 @@ public class GamePlayerController : MonoBehaviour
             Debug.LogError("Not Founded Rigidbody");
         }
     }
-    void Start()
-    {
-
-    }
 
     void Update()
     {

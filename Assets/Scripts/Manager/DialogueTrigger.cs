@@ -11,7 +11,8 @@ public class DialogueTrigger : MonoBehaviour
     {
         "Hello",
         "Do you want to play a game?",
-        "Okay, that's the answer, let's get started "
+        "Well, no matter what you say, the game starts.", 
+        "let's get started "
     };
 
     private void Update()
