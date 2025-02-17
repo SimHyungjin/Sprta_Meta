@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Windows;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : BaseController
 {
@@ -16,84 +17,83 @@ public class PlayerController : BaseController
     private bool isBoosting;
 
     private Animator animator;
+    private Rigidbody2D rb;
 
     protected override void Awake()
     {
         animator = GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
-        PlayerMovment();
+        if (!isMoving && inputKey != Vector2.zero)
+            StartMove();
+        MoveToTarget();
+        PlayerAnim(inputKey);
     }
+
+    private void StartMove()
+    {
+        targetPosition = (Vector2)rb.position + inputKey * GridSize;
+        if (IsColliding(targetPosition))
+        {
+            return;
+        }
+        isMoving = true;
+        Boost();
+    }
+
+    private void MoveToTarget()
+    {
+        if (!isMoving) return;
+        rb.MovePosition(Vector2.MoveTowards(rb.position, targetPosition, currentSpeed * Time.fixedDeltaTime));
+        if (Vector2.Distance(rb.position, targetPosition) < 0.01f)
+        {
+            rb.position = targetPosition;
+            isMoving = false;
+        }
+    }
+
+    private bool IsColliding(Vector2 target)
+    {
+        int playerlayer = LayerMask.GetMask("Player");
+        int triggerobj = LayerMask.GetMask("TriggerObj");
+        int mask = ~(playerlayer | triggerobj);
+        Vector2 direction = (target - (Vector2)transform.position).normalized;
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position, direction, GridSize.x,mask);
+        if (hit.collider != null)
+        {
+            return true; // 충돌 발생
+        }
+        return false; // 이동 가능
+    }
+
+
+
+
+
 
     public void SetInput(Vector2 input)
     {
-        //UnityEngine.Debug.Log(input);
-        inputKey = input;
+        if (!isMoving)
+            inputKey = input;
     }
+
     public void SetBoost(bool boost)
     {
-        //UnityEngine.Debug.Log(boost);
         isBoosting = boost;
     }
 
-    public void PlayerMovment()
-    {
-        if (!isMoving && inputKey != Vector2.zero)
-        {
-            targetPosition = (Vector2)transform.position + inputKey * GridSize; // 이동할 위치 계산
-            
-            if (!IsColliding(targetPosition))
-            {
-                isMoving = true; // 이동 시작
-                Boost();
-                StartCoroutine(TargetToMovement()); // 이동 실행
-            }
-            else
-                isMoving = false; 
-        }
-        PlayerAnim(inputKey); // 애니메이션 실행
-    }
-
-    public IEnumerator TargetToMovement()
-    {
-        while (Vector2.Distance(transform.position, targetPosition) > 0.01f) // 목표 위치까지 이동
-        {
-            transform.position = Vector2.MoveTowards(transform.position, targetPosition, currentSpeed * Time.deltaTime);
-            yield return null;
-        }
-        transform.position = targetPosition; // 정확한 위치 조정
-        isMoving = false; // 이동 완료
-    }
-
-    //앞에 콜라이더가 있는지 확인
-    private bool IsColliding(Vector2 target)
-    {
-        Vector2 direction = (target - (Vector2)transform.position).normalized; // 방향 계산
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, GridSize.x);
-
-        UnityEngine.Debug.DrawRay(transform.position, direction * GridSize.x, Color.red, 1f);
-        UnityEngine.Debug.Log(hit.collider.name);
-
-        if (hit.collider != null && !hit.collider.CompareTag("Player"))
-            return true;
-
-        return false;
-    }
-
-    //입력을 받으면 부스트
     private void Boost()
     {
         currentSpeed = isBoosting ? boostSpeed : moveSpeed;
-        animator.speed = currentSpeed/3;
+        animator.speed = currentSpeed / 3;
     }
 
     private void PlayerAnim(Vector2 move)
     {
-        move *= 5;
         animator.SetFloat("MoveX", move.x);
         animator.SetFloat("MoveY", move.y);
     }
 }
-
