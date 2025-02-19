@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MiniGameManager : MonoBehaviour
@@ -9,9 +10,15 @@ public class MiniGameManager : MonoBehaviour
 
     MiniGameUIManager uimanager;
     public MiniGameUIManager UIManager => uimanager;
-    private float score;
     private float currentScore = 0;
-    private float bestScore;
+    public float CurrentScore { get => currentScore; set { currentScore = value; } }
+    private float bestScore = 0;
+    public float BestScore { get => bestScore; set { bestScore = value; } }
+    private bool endGame = false;
+    public bool EndGame { get => EndGame; set { endGame = value; } }
+
+    public TextMeshProUGUI currentScoreText;
+    public TextMeshProUGUI BestScoreText;
 
     private void Awake()
     {
@@ -38,6 +45,17 @@ public class MiniGameManager : MonoBehaviour
             {
                 uimanager.SetTipPanel();
             }
+        }
+        if (endGame)
+        {
+            uimanager.ResultText(currentScore);
+            uimanager.currentScore(currentScore);
+            uimanager.BestScore(currentScore);
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                endGame = false;
+                GameManager.Instance.ChangeScene("MainScene");
+            }  
         }
     }
 }

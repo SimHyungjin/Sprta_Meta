@@ -7,29 +7,21 @@ public class DialogueTrigger : MonoBehaviour
     
     private bool isPlayerInRange = false;
 
-    private string[] dialogueLines = new string[]
-    {
-        "Hello",
-        "Do you want to play a game?",
-        "Well, no matter what you say, the game starts.", 
-        "let's get started "
-    };
-
-    private void Update()
-    {
-        if (isPlayerInRange && Input.GetKeyDown(KeyCode.Z))  // Z키를 눌러 대화 시작
-        {
-            isPlayerInRange = false;
-            DialogueManager.instance.StartDialogue(dialogueLines);
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            UnityEngine.Debug.Log("접근");
             isPlayerInRange = true;
+            string npcName = gameObject.name;
+            int intKey = GameManager.Instance.PlayingCount;
+            if (intKey == 0)
+                intKey = 0;
+            else
+                intKey = 1;
+            string key = $"{npcName}_{intKey}";
+
+            DialogueManager.instance.CurrentKey = key;
+            DialogueManager.instance.SetDialogues();  
         }
     }
 
@@ -41,3 +33,4 @@ public class DialogueTrigger : MonoBehaviour
         }
     }
 }
+

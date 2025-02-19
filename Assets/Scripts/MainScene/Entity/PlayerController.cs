@@ -25,12 +25,15 @@ public class PlayerController : BaseController
         rb = GetComponent<Rigidbody2D>();
     }
 
-    protected override void FixedUpdate()
+    protected void FixedUpdate()
     {
-        if (!isMoving && inputKey != Vector2.zero)
-            StartMove();
-        MoveToTarget();
-        PlayerAnim(inputKey);
+        if(!GameManager.Instance.isTalking)
+        {
+            if (!isMoving && inputKey != Vector2.zero)
+                StartMove();
+            MoveToTarget();
+            PlayerAnim(inputKey);
+        }
     }
 
     private void StartMove()
@@ -68,11 +71,6 @@ public class PlayerController : BaseController
         }
         return false; // 이동 가능
     }
-
-
-
-
-
 
     public void SetInput(Vector2 input)
     {
