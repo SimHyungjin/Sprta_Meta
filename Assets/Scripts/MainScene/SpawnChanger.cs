@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnChanger : MonoBehaviour
 {
     public GameObject obj;
-    private int count = 10;
+    private int count = 1;
 
     private void Start()
     {

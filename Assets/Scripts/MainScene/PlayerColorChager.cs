@@ -12,11 +12,7 @@ public class PlayerColorChager : MonoBehaviour
             SpriteRenderer playerSprite = collision.gameObject.GetComponentInChildren<SpriteRenderer>();
 
             if (playerSprite != null)
-            {
-                
                 playerSprite.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1);
-                Debug.Log("»ö º¯°æ" + playerSprite.color);
-            }
         }
     }
 

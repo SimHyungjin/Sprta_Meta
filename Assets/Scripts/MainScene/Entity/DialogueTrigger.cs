@@ -23,7 +23,7 @@ public class DialogueTrigger : MonoBehaviour
             DialogueManager.instance.CurrentKey = key;
             DialogueManager.instance.SetDialogues();  
         }
-    }
+    } 
 
     private void OnTriggerExit2D(Collider2D other)
     {
