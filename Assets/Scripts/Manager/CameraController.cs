@@ -7,7 +7,7 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private GameObject target;
-    private float lerpSpeed = 1.0f;
+    private float lerpSpeed = 0.1f;
     private Camera _camera;
     private string currentScene;
     private Vector3 targetPos;
@@ -17,11 +17,10 @@ public class CameraController : MonoBehaviour
         _camera = Camera.main;
         currentScene = SceneManager.GetActiveScene().name;
     }
-    void Update()
+    private void FixedUpdate()
     {
         CameraControl();
     }
-
     private void CameraControl()
     {
         float SceneScale = Input.GetAxis("Mouse ScrollWheel");
@@ -33,12 +32,14 @@ public class CameraController : MonoBehaviour
                 float posX = Mathf.Clamp(target.transform.position.x, -21.5f + _camera.orthographicSize*1.8f, 15.5f - _camera.orthographicSize*1.8f);
                 float posY = Mathf.Clamp(target.transform.position.y, -15.5f + _camera.orthographicSize, 15.5f - _camera.orthographicSize);
                 targetPos = new Vector3(posX, posY, transform.position.z);
+                transform.position = Vector3.Lerp(transform.position, targetPos, 1);
             }
             else if (currentScene == "JumpGameScene")
             {
-                targetPos = new Vector3(target.transform.position.x + 4.5f, transform.position.y, transform.position.z);
+                targetPos = new Vector3(target.transform.position.x + 4.5f, target.transform.position.y+2f, transform.position.z);
+                transform.position = Vector3.Lerp(transform.position, targetPos, lerpSpeed);
             }
-            transform.position = Vector3.Lerp(transform.position, targetPos, lerpSpeed);
+            
         }
     }
 }

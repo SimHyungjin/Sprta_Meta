@@ -13,6 +13,10 @@ public class GameManager : MonoBehaviour
     public Vector3 SavePlayerPos { get => savePlayerPos; set => savePlayerPos = value; }
     private float bestScore;
     public float BestScore { get => bestScore; set => bestScore = value; }
+    private Color playerColor;
+    public Color PlayerColor { get => playerColor; set => playerColor = value; }
+    private bool isColor = false;
+    public bool IsColor { get => isColor; set => isColor = value; }
 
     private void Awake()
     {

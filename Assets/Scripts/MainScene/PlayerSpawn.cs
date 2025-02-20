@@ -5,10 +5,26 @@ using UnityEngine.SceneManagement;
 
 public class PlayerSpawn : MonoBehaviour
 {
-    [SerializeField] private Transform player;
+    private GameObject player;
+
     private void Start()
     {
-        if(GameManager.Instance.PlayingCount != 0)
-            player.position = GameManager.Instance.SavePlayerPos;
+        player = GameObject.Find("Player");
+
+        if (GameManager.Instance.PlayingCount != 0)
+            player.transform.position = GameManager.Instance.SavePlayerPos;
+
+        if (GameManager.Instance.IsColor)
+        {
+            SpriteRenderer renderer = player.GetComponentInChildren<SpriteRenderer>();
+            if (renderer != null)
+            {
+                renderer.color = GameManager.Instance.PlayerColor;
+                Debug.Log(renderer.name);
+                Debug.Log("색 변화");
+                Debug.Log("색 :" + renderer.color);
+            }
+        }
     }
+
 }

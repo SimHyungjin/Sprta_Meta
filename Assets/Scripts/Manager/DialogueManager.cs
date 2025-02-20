@@ -24,8 +24,8 @@ public class DialogueManager : MonoBehaviour
         { "Chick2_0", new string[] { "You've never played a game.", "Get out of here!" } },
         { "Chick2_1", new string[] { "You played a game...", "I'm sorry, but I can't afford to make any more." } },
         { "Manual_0", new string[] { "If you want to play a game, Find the chicken." } },
-        { "Manual_1", new string[] { "If you tell me how to play the game","I've done everything I can","Get out!" } },
-        { "Manual2_0", new string[] { "Go play a game" } },
+        { "Manual_1", new string[] { "If you tell me how to play the game","I've done everything I can" } },
+        { "Manual2_0", new string[] { "Find a chicken" } },
         { "Manual2_1", new string[] { "There is a place somewhere here", "where you can change your color" } }
     };
 
